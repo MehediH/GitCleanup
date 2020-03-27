@@ -1,5 +1,5 @@
 {
-  "name": "gitremove",
+  "name": "git-cleanup",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

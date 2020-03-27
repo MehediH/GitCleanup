@@ -5,8 +5,8 @@ class Home extends Component {
     render() {
         return (
             <div className="welcome">
-                <h1>Welcome to GitDelete</h1>
-                <h2>Delete all your abandoned or empty GitHub repositories with a few clicks.</h2>
+                <h1>Welcome to GitCleanup</h1>
+                <h2>Clean up your GitHub by deleting your abandoned or empty repositories with a few clicks.</h2>
                 <a href="/auth"><GoMarkGithub/>Login with GitHub</a>
             </div>
         );
