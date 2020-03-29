@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { GoSignOut } from "react-icons/go";
+import { FiLogOut, FiSearch } from "react-icons/fi";
 
 class Nav extends Component {
     constructor(props){
@@ -29,9 +29,13 @@ class Nav extends Component {
                             <span>{user.username}</span>
                         </li>
                     </a>
+                    <li>
+                        <FiSearch/>
+                        <span>Search</span>
+                    </li>
                     <a href="/api/logout" title="Logout">
                         <li>
-                            <GoSignOut/>
+                            <FiLogOut/>
                             <span>Logout</span>
                         </li>
                     </a>

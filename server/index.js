@@ -83,7 +83,7 @@ app.get("/api/repos", connect.ensureLoggedIn(loginUrl), (req, res) => {
 
     return new Promise(resolve => {
         request({
-            url: 'https://api.github.com/user/repos',
+            url: 'https://api.github.com/user/repos?sort=created',
             headers: {
                 "Authorization": `token ${accessToken}`,
                 "User-Agent": "GitCleanup"
@@ -99,6 +99,7 @@ app.get("/api/repos", connect.ensureLoggedIn(loginUrl), (req, res) => {
 })
 
 app.get("/api/repos/delete/:id", connect.ensureLoggedIn(loginUrl), (req, res) => {
+    let user = req.user;
     let accessToken = user["accessToken"];
 
     return new Promise(resolve => {

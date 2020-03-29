@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { GoMarkGithub } from "react-icons/go";
 
-class Home extends Component {
+class Splash extends Component {
     render() {
         return (
             <div className="welcome">
@@ -13,4 +13,4 @@ class Home extends Component {
     }
 }
 
-export default Home;
+export default Splash;
