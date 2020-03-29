@@ -7,7 +7,7 @@ class Home extends Component {
             <div className="welcome">
                 <h1>Welcome to GitCleanup</h1>
                 <h2>Clean up your GitHub by deleting your abandoned or empty repositories with a few clicks.</h2>
-                <a href="/auth"><GoMarkGithub/>Login with GitHub</a>
+                <a href="/api/login"><GoMarkGithub/>Login with GitHub</a>
             </div>
         );
     }

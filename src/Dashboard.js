@@ -16,7 +16,7 @@ class Dashboard extends Component {
     }
 
     componentWillMount(){
-        fetch("/auth/user/repos").then(res => res.json()).then((res) => {
+        fetch("/api/user/repos").then(res => res.json()).then((res) => {
             if(res["message"]){
                 this.setState({needsLogin: true});
                 return

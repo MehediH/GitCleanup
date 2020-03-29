@@ -17,7 +17,7 @@ class App extends Component {
     }
 
     componentWillMount(){
-        fetch("/auth/user/").then(res => res.json()).then((res) => {
+        fetch("/api/user/").then(res => res.json()).then((res) => {
             if(res["message"]){
                 this.setState({needsLogin: true});
                 return

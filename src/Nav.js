@@ -11,7 +11,7 @@ class Nav extends Component {
     }
 
     componentWillMount(){
-        fetch("/auth/user").then(res => res.json()).then((res) => {
+        fetch("/api/user").then(res => res.json()).then((res) => {
             this.setState({user: res})
         }).catch(err => console.log(err))
     }
@@ -21,7 +21,7 @@ class Nav extends Component {
 
         return (
             <header>
-                <h1>GitDelete</h1>
+                <h1>GitCleanup</h1>
                 <ul>
                     <a href={user.profileUrl} target="_blank" rel="noopener noreferrer" title="View profile on GitHub">
                         <li>
@@ -29,7 +29,7 @@ class Nav extends Component {
                             <span>{user.username}</span>
                         </li>
                     </a>
-                    <a href="/auth/logout" title="Logout">
+                    <a href="/api/logout" title="Logout">
                         <li>
                             <GoSignOut/>
                             <span>Logout</span>
