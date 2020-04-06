@@ -43,12 +43,23 @@ const dev = app.get("env") !== "production";
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({ secret: 'totoro', resave: true, saveUninitialized: true }));
+app.use(cors());
+
+if(!dev){
+    app.disable("x-powered-by")
+    app.use(compression())
+    app.use(require('morgan')('tiny'));
+
+    app.use(express.static(path.resolve(__dirname, "build")))
+
+} else{
+    app.use(require('morgan')('dev'));
+}
 
 // Initialize Passport and restore authentication state, if any, from the
 // session.
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 app.get("/api/login", passport.authenticate("github"));
 
@@ -119,18 +130,12 @@ app.get("/api/repos/delete/:id", connect.ensureLoggedIn(loginUrl), (req, res) =>
     })
 })
 
+
+
 if(!dev){
-    app.disable("x-powered-by")
-    app.use(compression())
-    app.use(require('morgan')('tiny'));
-
-    app.use(express.static(path.resolve(__dirname, "build")))
-
     app.get("*", (req, res) => {
         res.sendFile(path.resolve(__dirname, "build", "index.html"));
     })
-} else{
-    app.use(require('morgan')('dev'));
 }
 
 
