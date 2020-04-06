@@ -120,3 +120,4 @@ dist
 
 
 .env
+build/*

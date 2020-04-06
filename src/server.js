@@ -6,6 +6,8 @@ const passport = require("passport");
 const GitHubStrategy = require("passport-github").Strategy;
 const request = require("request");
 const connect = require("connect-ensure-login");
+const compression = require("compression");
+const path = require("path");
 
 let loginUrl = "/";
 
@@ -33,10 +35,11 @@ passport.use(new GitHubStrategy({
 ));
 
 const app = express();
+const dev = app.get("env") !== "production";
+
 
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
-app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({ secret: 'totoro', resave: true, saveUninitialized: true }));
@@ -46,20 +49,6 @@ app.use(require('express-session')({ secret: 'totoro', resave: true, saveUniniti
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/", (req, res) => {
-    if(!req.user){
-        res.send({
-            message: "Please login to use the GitCleanup API"
-        })
-    } else{
-        res.send({
-            userProfile: "/api/user",
-            userRepos: "/api/user/repos",
-            logout: "/api/logout",
-            deleteRepo: "/api/user/delete/:repoName"
-        })
-    }
-})
 
 app.get("/api/login", passport.authenticate("github"));
 
@@ -129,6 +118,21 @@ app.get("/api/repos/delete/:id", connect.ensureLoggedIn(loginUrl), (req, res) =>
         }
     })
 })
+
+if(!dev){
+    app.disable("x-powered-by")
+    app.use(compression())
+    app.use(require('morgan')('tiny'));
+
+    app.use(express.static(path.resolve(__dirname, "../build")))
+
+    app.get("*", (req, res) => {
+        res.sendFile(path.resolve(__dirname, "../build", "index.html"));
+    })
+} else{
+    app.use(require('morgan')('dev'));
+}
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT); 

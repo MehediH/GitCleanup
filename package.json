@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
     "concurrently": "^5.1.0",
     "connect-ensure-login": "^0.1.1",
     "cookie-parser": "^1.4.5",
@@ -35,7 +36,6 @@
     "server": "nodemon server/index.js",
     "dev": "concurrently \"npm start\" \"npm run server\" "
   },
-  "proxy": "http://localhost:5000",
   "eslintConfig": {
     "extends": "react-app"
   },
