@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Nav from "../components/Nav";
-import { FiGlobe, FiLock, FiTrash2, FiXCircle} from "react-icons/fi";
+import { FiGlobe, FiLock, FiTrash2, FiXCircle, FiThumbsDown, FiThumbsUp, FiFrown, FiSmile} from "react-icons/fi";
 import { PropagateLoader } from "react-spinners";
 import Repo from '../components/Repo';
 
@@ -14,15 +14,28 @@ class Dashboard extends Component {
             deletedRepos: [],
             loading: true,
             deleting: false,
-            deleteLog: []
+            searchOpen: false
         }
     }
 
     sortByStar(obj){
-        return Object.values(obj).sort((a,b)=>a.stargazers_count-b.stargazers_count).reverse();
+        let repos = Object.values(obj).sort((a,b)=>a.stargazers_count-b.stargazers_count).reverse();
+        let deletedRepos = this.state.deletedRepos.map(r => r.name);
+
+        this.setState({
+            deletedRepos: this.state.deletedRepos.filter(r => repos.map(r => r.name).includes(r.name))
+        })
+
+        repos = repos.filter(r => !deletedRepos.includes(r.name))
+
+        return repos;
     }
 
     componentWillMount(){
+        this.loadRepos();
+    }
+
+    loadRepos(){
         fetch("/api/repos").then(res => res.json()).then((res) => {
             this.setState({repos: this.sortByStar(res), loading: false})
         }).catch(err => console.log(err))
@@ -30,6 +43,8 @@ class Dashboard extends Component {
 
     addToDelete(repo){
         let repos = Object.values(this.state.repos);
+        repos.map(r => r.cleanupStatus = "");
+
         this.setState({
             repos: {...repos.filter(r => r.name !== repo.name)},
             deletedRepos: [repo, ...this.state.deletedRepos]
@@ -37,7 +52,7 @@ class Dashboard extends Component {
     }
 
     removeFromDelete(repo, addBack=true){
-        let deletedRepos = this.state.deletedRepos;
+        let deletedRepos = this.state.deletedRepos.filter(i => i.name !== repo.name);
         let repos = Object.values(this.state.repos)
         
         if(addBack){
@@ -46,54 +61,84 @@ class Dashboard extends Component {
 
         this.setState({
             repos: {...repos},
-            deletedRepos: deletedRepos.filter(r => r.name !== repo.name)
+            deletedRepos
         })
     }
 
     deleteRepos(){
-        this.setState({deleting: true})
-
         let {deletedRepos} = this.state;
 
+        deletedRepos.map(r => r.cleanupStatus = "deleting");
+
+        this.setState({deletedRepos})
+
+        if(deletedRepos.length === 0){
+            return;
+        }
+
+        this.setState({deleting: true})
+
         let app = this;
-        deletedRepos.map((repo) => {
-            let deleteRepo = async () => {
-                await fetch("/api/repos/delete/" + repo.name).then(res => res.json()).then((res) => {
-                    let deleteLog =  this.state.deleteLog;
-                    deleteLog.unshift(res)
-                    app.setState({
-                        deleteLog
-                    })
+        let status = "success";
+        let deleteFromApi = deletedRepos.map((repo) => {
+            return new Promise((resolve, reject) => {
+                fetch(`/api/repos/delete/${repo.name}`).then(res => res.json()).then((res) => {
+                    repo.cleanupMessage = res.message;
 
                     if(res.statusCode === 204){
+                        repo.cleanupStatus = "success"
+                        deletedRepos = deletedRepos.filter(i => i.name !== repo.name);
                         app.removeFromDelete(repo, false)
+                    } else{
+                        repo.cleanupStatus = "error"
+                        status = "error";
                     }
-                })
-            }
+                    
+                    app.setState({deletedRepos});
+                    
+                    resolve(status);
+                }).catch(err => reject(err));
+            })
             
-            deleteRepo();
         })
 
+        Promise.all(deleteFromApi).then((status) => {
+            if(status.some(i => i === "error")){
+                this.setState({deleting: "error"})
+            } else{
+                this.setState({deleting: "success"})
+
+            }
+        })
+       
    
     }
 
     closeModal(){
+        let {deletedRepos} = this.state;
+
+        deletedRepos.map((repo) => {
+            repo.cleanupMessage = "";
+            repo.cleanupStatus = "";
+        })
+
         this.setState({
             deleteWarn: false,
             deleting: false,
-            currentDelete: ""
+            currentDelete: "",
+            deletedRepos
         })
     }
 
     render() {
-        let {repos, deletedRepos, loading, deleteWarn, deleting, deleteLog} = this.state;
+        let {repos, deletedRepos, loading, deleteWarn, deleting, searchOpen} = this.state;
         repos = Object.values(repos); 
         let privateRepos = repos.filter(repo => repo.private);
         let publicRepos = repos.filter(repo => !repo.private);
-
+        
         return (
             <div className="dashboard" onKeyDown={e => e.keyCode === 27 ? this.closeModal() : null}>
-                <Nav/>
+                <Nav repos={repos} addToDelete={e => this.addToDelete(e)}/>
 
                 <div className="repo-list">
                     <div className="group public">
@@ -159,40 +204,63 @@ class Dashboard extends Component {
                             <div className="inner">
                                 <div className="header">
                                     <h3>Deleting Repositories</h3>
-                                    <FiXCircle onClick={e => this.closeModal()}/>
+                                    <FiXCircle onClick={e => this.closeModal()} className="close-icon"/>
                                 </div>
                                 <div className="content">
-                                    { !deleting && 
-                                        <React.Fragment>
-                                            <div className="warning">
-                                                <p><strong>Warning:</strong> this will completely delete the following repositories, including all your commits, files, stars, settings, releases, etc. for the selected repositories. Please make sure you want to delete the following repositories.</p>
-                                                <p>Note: you will only be able recover some of the following repositories after you delete them if needed. However, if your repository was part of a fork network, it cannot be restored unless every other repository in the network is deleted or has been detached from the network. You'll need to contact GitHub support to restore such a repository.</p>
-                                            </div>
-                                            <ul>
-                                                {deletedRepos.map((repo) => {
-                                                    return (
-                                                        <li key={repo.id}>
-                                                            <a href={repo.html_url} target="_blank" rel="noopener noreferrer" title="View repository on GitHub">{repo.name}</a>
-                                                            <FiXCircle title="Don't delete this repository" onClick={e => this.removeFromDelete(repo)}/>
-                                                        </li>
-                                                    )
-                                                })}
-                                            </ul>
-                                            <button className="delete-button" onClick={e => this.deleteRepos()}>Permanently Delete {deletedRepos.length} Repositories</button>
-                                        </React.Fragment>
-                                    } 
-
-                                    { deleting && 
-                                        <div className="deleting">
+                                    <React.Fragment>
+                                        { !deleting && <div className="warning">
+                                            <p><strong>Warning:</strong> this will completely delete the following repositories, including all your commits, files, stars, settings, releases, etc. for the selected repositories. Please make sure you want to delete the following repositories.</p>
+                                            <p>Note: you will only be able recover some of the following repositories after you delete them if needed. However, if your repository was part of a fork network, it cannot be restored unless every other repository in the network is deleted or has been detached from the network. You'll need to contact GitHub support to restore such a repository.</p>
+                                        </div> }
+                                        { deleting===true && <div className="deleting">
                                             <FiTrash2/>
-                                            <h3>Deleting your repositories...</h3>
-                                            {
-                                                deleteLog.map((out) => {
-                                                    return<li key={out.message}>{out.message} (Status: {out.statusCode})</li>
-                                                })
-                                            }
-                                        </div>
-                                    }
+                                        </div> }
+                                        { deleting==="success" && <div className="deleting">
+                                            <React.Fragment>
+                                                <FiSmile className="no-anim"/>
+                                                <p>Successfully deleted all your repositories!</p>
+                                            </React.Fragment>
+                                        </div> }
+                                        { deleting==="error" && <div className="deleting">
+                                            <React.Fragment>
+                                                <FiFrown className="no-anim"/>
+                                                <p>We couldn't delete all your repositories. You can see details of what went wrong below. </p>
+                                            </React.Fragment>
+                                        </div> }
+                                        <ul>
+                                            {deletedRepos.map((repo) => {
+                                                return (
+                                                    <li key={repo.id}>
+                                                        <div className="header">
+                                                            <a href={repo.html_url} target="_blank" rel="noopener noreferrer" title="View repository on GitHub">{repo.name}</a>
+                                                            
+                                                            {
+                                                                repo.cleanupStatus === "" && <FiXCircle className="close-icon" title="Don't delete this repository" onClick={e => this.removeFromDelete(repo)}/>
+                                                            }
+
+                                                            {
+                                                                repo.cleanupStatus === "deleting" && <FiTrash2/>
+                                                            }
+                                                
+                                                            {
+                                                                repo.cleanupStatus === "error" && <FiThumbsDown/>
+                                                            }
+                                                            
+                                                            {
+                                                                repo.cleanupStatus === "success" && <FiThumbsUp/>
+                                                            }
+                                                        </div>
+
+                                                        {
+                                                            repo.cleanupMessage && <p>{repo.cleanupMessage}</p>
+                                                        }
+                                                    </li>
+                                                )
+                                            })}
+                                        </ul>
+                                        {!deleting && <button className="delete-button" onClick={e => this.deleteRepos()}>Permanently Delete {deletedRepos.length} Repositories</button>}
+                                    </React.Fragment>
+
                                 </div>
                             </div>
                         </div>
@@ -201,6 +269,8 @@ class Dashboard extends Component {
                    </React.Fragment>
 
                 }
+
+
             </div>
         );
     }

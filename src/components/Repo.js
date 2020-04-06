@@ -14,8 +14,6 @@ class Repo extends Component {
             <li className="repo">
                 <div className="header">
                     <a className="name" href={repo.html_url} target="_blank" rel="noopener noreferrer" title="View repository on GitHub">{repo.name}</a>
-                    
-                    
                 </div>
                 { repo.description && <p>{repo.description}</p>}
                 <ul className="stats">
@@ -41,7 +39,7 @@ class Repo extends Component {
                 <footer>
                     <a className="gh-link" href={repo.html_url} target="_blank" rel="noopener noreferrer" title="View repository on GitHub"><GoMarkGithub/>Open on Github</a>
                     {
-                        repo.delete && 
+                        (repo.delete || repo.showIcon) && 
                             <React.Fragment>
                                 {
                                     repo.private ? <FiLock/> : <FiGlobe/>

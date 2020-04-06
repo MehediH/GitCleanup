@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import { GoMarkGithub } from "react-icons/go";
+import logo from "../assets/logo.png";
+import lightLogo from "../assets/lightLogo.png";
 
 class Splash extends Component {
-    render() {
+
+    render() {        
         return (
             <div className="welcome">
+                <div className="logo-cont">
+                    <img src={logo} alt="GitCleanup logo" draggable="false" className="darkLogo logo"/>
+                    <img src={lightLogo} alt="GitCleanup logo" draggable="false" className="lightLogo logo"/>
+                </div>
                 <h1>Welcome to GitCleanup</h1>
-                <h2>Clean up your GitHub by deleting your abandoned or empty repositories with a few clicks.</h2>
+                <h2>Clean up your GitHub by deleting abandoned or empty repositories with just a few clicks.</h2>
                 <a href="/api/login"><GoMarkGithub/>Login with GitHub</a>
             </div>
         );

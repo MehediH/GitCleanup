@@ -7,7 +7,10 @@ import history from "./history";
 import Splash from "./views/Splash";
 import Dashboard from "./views/Dashboard";
 
+import initSwitcher from "favicon-switcher";
+
 import "./styles/app.scss";
+import {checkTheme} from "./components/checkTheme"
 
 let GlobalStyle = createGlobalStyle`
   @font-face {
@@ -40,22 +43,28 @@ class App extends Component {
         this.state = {
             user: {}
         }
-    }
 
-    componentWillMount(){
+        initSwitcher();
+
+      }
+      
+      componentWillMount(){
         fetch("/api/user/").then(res => res.json()).then((res) => {
-            this.setState({user: res})
+          this.setState({user: res})
         }).catch(err => console.log(err))
-    }
+      }
+      
+      
 
-    render() {
+      render() {
+        let isLight = checkTheme();
         return (
             <Router history={history}>
                 <GlobalStyle/>
                 {
                     this.state.user.accessToken ?
-                        <Route path="/" component={Dashboard}/>
-                    : <Route path="/" exact component={Splash}/>
+                        <Route path="/" component={() => <Dashboard isLight={isLight} />}/>
+                    : <Route path="/" exact component={() => <Splash isLight={isLight} />}/>
                 }
                 
             </Router>
