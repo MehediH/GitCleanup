@@ -512,7 +512,8 @@ body{
         }
 
         .header{
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 10px;
             justify-content: space-between;
 
             svg{
