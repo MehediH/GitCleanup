@@ -124,10 +124,10 @@ if(!dev){
     app.use(compression())
     app.use(require('morgan')('tiny'));
 
-    app.use(express.static(path.resolve(__dirname, "../build")))
+    app.use(express.static(path.resolve(__dirname, "build")))
 
     app.get("*", (req, res) => {
-        res.sendFile(path.resolve(__dirname, "../build", "index.html"));
+        res.sendFile(path.resolve(__dirname, "build", "index.html"));
     })
 } else{
     app.use(require('morgan')('dev'));
