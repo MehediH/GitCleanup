@@ -23,7 +23,6 @@ passport.deserializeUser((user, cb) => {
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: "/api/callback",
     scope: "repo,delete_repo"
   }, (accessToken, refreshToken, profile, cb) => {
     let user = {
