@@ -652,12 +652,13 @@ body{
     overflow: hidden;
 }
 
+footer.welc{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
 @media(max-width: 990px){
-    footer.welc{
-        position: fixed;
-        bottom: 0;
-        left: 0;
-    }
 
     .welcome{
         padding: 10px;
