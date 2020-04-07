@@ -648,7 +648,33 @@ body{
     }
 }
 
+.mm-open{
+    overflow: hidden;
+}
+
 @media(max-width: 990px){
+    .welcome{
+        padding: 10px;
+        width: 90vw;
+
+        .logo-cont{
+            img{
+                width: 80px;
+            }
+            
+            padding-bottom: 10px;
+        }
+
+        h1{
+            font-size: 28px;
+        }
+
+        h2{
+            font-size: 20px;
+        }
+        
+    }
+
     .nav-items{
         display: none !important;
     }
@@ -666,7 +692,7 @@ body{
     .backdrop{
         margin-top: 120px;
     }
-    
+
     .mobile-open{
         height: 100%;
         position: fixed;
@@ -725,6 +751,14 @@ body{
     .dashboard{
         .repo-list{
             display: block;
+
+            ul{
+                padding-right: 5px !important;
+            }
+
+            .repo{
+                padding: 15px !important;
+            }
         }
 
         .group{

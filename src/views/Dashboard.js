@@ -128,6 +128,8 @@ class Dashboard extends Component {
             currentDelete: "",
             deletedRepos
         })
+
+        document.body.classList.remove("mm-open")
     }
 
     render() {
@@ -186,7 +188,7 @@ class Dashboard extends Component {
                         
                         <ul className={`group-list ${deletedRepos.length === 0 ? "" : "delete-list"}`}>
                             { deletedRepos.length === 0 ?
-                                <p className="notice">To delete repositories, start by adding repositories from the list of public or private repositories.</p>
+                                <p className="notice">To select repositories you want to delete, start by adding repositories from the list of public or private repositories.</p>
                              : <React.Fragment>
                                 {deletedRepos.map((repo) => {
                                     return <Repo key={repo.id} onClick={e => this.removeFromDelete(repo)} {...repo} delete={true}></Repo>
@@ -201,6 +203,7 @@ class Dashboard extends Component {
                 { deleteWarn &&
                    <React.Fragment>
                         <div className="modal">
+                            {document.body.classList.add("mm-open")}
                             <div className="inner">
                                 <div className="header">
                                     <h3>Deleting Repositories</h3>
