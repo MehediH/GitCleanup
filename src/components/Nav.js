@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FiLogOut, FiSearch, FiSun, FiMoon} from "react-icons/fi";
+import { FiLogOut, FiSearch, FiSun, FiMoon, FiCoffee} from "react-icons/fi";
 import logo from "../assets/logo.png";
 import lightLogo from "../assets/lightLogo.png";
 import Fuse from "fuse.js";
@@ -68,12 +68,6 @@ class Nav extends Component {
                     <img src={logo} alt="GitCleanup logo" draggable="false" className="logo darkLogo"/>
                 </div>
                 <ul className={`nav-items search-${this.state.search ? "open" : "closed"} results-${this.state.searchResults.length !== 0 ? "showing" : "hidden"}`}>
-                    <a href={user.profileUrl} target="_blank" rel="noopener noreferrer" title="View profile on GitHub">
-                        <li className="nav-item">
-                            <img src={user.photos ? user.photos[0].value : ""} alt=""/>
-                            <span>{user.username}</span>
-                        </li>
-                    </a>
                     <li onClick={e => this.setState({search: true})} className="search nav-item" ref={this.searchBox}>
                         <FiSearch/>
                         
@@ -85,16 +79,31 @@ class Nav extends Component {
                             </React.Fragment>
                         }
                     </li>
-                    <li className="nav-item" onClick={e => this.switchTheme()}>
+                    <li className="nav-item" onClick={e => this.switchTheme()} title="Switch theme">
                         <FiMoon className="lightLogo"/> 
                         <FiSun className="darkLogo"/>
                     </li>
+
+                    <a href="https://ko-fi.com/mehedi" title="Buy me a coffee" target="_blank" rel="noopener noreferrer">
+                        <li className="nav-item">
+                            <FiCoffee/>
+                            <span>Donate</span>
+                        </li>
+                    </a>
+
+                    <a href={user.profileUrl} target="_blank" rel="noopener noreferrer" title="View profile on GitHub">
+                        <li className="nav-item">
+                            <img src={user.photos ? user.photos[0].value : ""} alt=""/>
+                            <span>{user.username}</span>
+                        </li>
+                    </a>
+
                     <a href="/api/logout" title="Logout">
                         <li className="nav-item">
                             <FiLogOut/>
-                            <span>Logout</span>
                         </li>
                     </a>
+                    
                 </ul>
             </header>
            {

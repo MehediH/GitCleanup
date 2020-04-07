@@ -182,7 +182,7 @@ class Dashboard extends Component {
                     </div>
 
                     <div className="group delete">
-                        <h3>Deleted Repositories <FiTrash2/></h3>
+                        <h3>Repositories to Delete <FiTrash2/></h3>
                         
                         <ul className={`group-list ${deletedRepos.length === 0 ? "" : "delete-list"}`}>
                             { deletedRepos.length === 0 ?

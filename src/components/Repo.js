@@ -47,7 +47,7 @@ class Repo extends Component {
                             </React.Fragment>
                     }
                 </footer>
-                { repo.delete ? <span className="btn" onClick={e => this.props.onClick(e)}><FiCornerUpLeft/>Don't Delete</span> : <span className="btn" onClick={e => this.props.onClick(e)}><FiTrash/>Delete</span>}
+                { repo.delete ? <span className="btn" onClick={e => this.props.onClick(e)}><FiCornerUpLeft/>Don't Delete</span> : <span className="btn" onClick={e => this.props.onClick(e)}><FiTrash/>Add to Delete</span>}
             </li>
         );
     }

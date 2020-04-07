@@ -67,6 +67,10 @@ class App extends Component {
                     : <Route path="/" exact component={() => <Splash isLight={isLight} />}/>
                 }
                 
+                <footer className="site-footer">
+                  <a href="https://builtbymeh.com/" target="_blank" rel="noopener noreferrer">Built with ❤ by Mehedi Hassan</a>&nbsp;·&nbsp;
+                  <a href="https://github.com/MehediH/GitCleanup" target="_blank" rel="noopener noreferrer">Checkout on GitHub</a>
+                </footer>
             </Router>
         );
     }

@@ -1,17 +1,19 @@
 export let checkTheme = () => {
-    const themeChecker = window.matchMedia('(prefers-color-scheme: light)');
-    let isLight = false;
+  let isLight = false;
+  
+  if(localStorage.getItem("gcTheme") !== undefined){
+    isLight = localStorage.getItem("gcTheme") === "light" ? true : false
+  }
 
-    if(localStorage.getItem("gcTheme") !== undefined){
-        isLight = localStorage.getItem("gcTheme") === "light" ? true : false
-    }
+  if(window.matchMedia){
+    const themeChecker = window.matchMedia('(prefers-color-scheme: light)');
 
     if(themeChecker.matches || isLight){
       document.body.classList.replace("dark", "light");
       isLight = true;
     }
 
-    themeChecker.addEventListener("change", () => {
+    themeChecker.addListener( () => {
       if(themeChecker.matches){
         document.body.classList.replace("dark", "light");
         isLight = true;
@@ -20,8 +22,14 @@ export let checkTheme = () => {
         isLight = false
       }
     })
-
-    
-    return isLight;
+  } else{
+    if(isLight){
+      document.body.classList.replace("dark", "light");
+      isLight = true;
+    }
+  }
+ 
+  
+  return isLight;
 }
 

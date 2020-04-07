@@ -33,9 +33,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "nodemon server/index.js",
+    "server": "nodemon server.js",
     "dev": "concurrently \"npm start\" \"npm run server\" "
   },
+  "proxy": "http://localhost:5000",
   "eslintConfig": {
     "extends": "react-app"
   },
