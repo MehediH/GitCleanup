@@ -653,6 +653,12 @@ body{
 }
 
 @media(max-width: 990px){
+    footer.welc{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+    }
+
     .welcome{
         padding: 10px;
         width: 90vw;
@@ -661,7 +667,7 @@ body{
             img{
                 width: 80px;
             }
-            
+
             padding-bottom: 10px;
         }
 
