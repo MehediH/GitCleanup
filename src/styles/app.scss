@@ -41,6 +41,7 @@ body{
     padding: 0 50px;
     animation: mte 1.5s 0s forwards ease-in-out;
     transition: background-color 100ms ease-in-out, color 200ms ease-in-out !important;
+    overflow-x: hidden;
 }
 
 
@@ -172,10 +173,10 @@ body{
     color: var(--text);
 
     .backdrop{
-        position: absolute;
+        position: fixed;
         width: 100%;
         height: 100%;
-        z-index: 8;
+        z-index: 88;
         left: 0;
         top: 0;
     }
@@ -184,7 +185,7 @@ body{
         position: absolute;
         right: 230px;
         top: 115px;
-        z-index: 999;
+        z-index: 9999;
         height: 500px;
         background-color: var(--cardBg);
         border-radius: 0px 0px 50px 50px;
@@ -271,6 +272,10 @@ body{
 
                 &:hover, &:active, &:focus{
                     transform: translateY(-3px);
+                }
+
+                .mm{
+                    display: none;
                 }
 
                 img{
@@ -498,7 +503,7 @@ body{
     }
 
     .overlay{
-        position: absolute;
+        position: fixed;
         width: 100%;
         height: 100%;
         top: 0;
@@ -508,7 +513,7 @@ body{
 
     .modal{
         z-index: 999;
-        position: absolute;
+        position: fixed;
         width: 70vw;
         height: 60vh;
         background-color: var(--cardBg);
@@ -647,14 +652,102 @@ body{
     .nav-items{
         display: none !important;
     }
+
+    .mobileMenu{
+        display: block !important;
+        font-size: 30px;
+        margin-top: 10px;
+    }
+
+    .search-box{
+        margin-top: 85px !important;
+    }
+
+    .backdrop{
+        margin-top: 120px;
+    }
+    
+    .mobile-open{
+        height: 100%;
+        position: fixed;
+        width: 100%;
+        z-index: 77;
+        left: 0;
+        top: 0;
+        margin: 0px !important;
+        display: block !important;
+        position: fixed;
+        background-color: var(--innerElem);
+        padding-top: 50px;
+        
+        .mm{
+            display: block !important; 
+        }
+
+        .brand{
+            padding-left: 25px;
+            padding-bottom: 20px;
+        }
+
+        .closeMenu{
+            float: right;
+            margin-right: 25px;
+            font-size: 30px;
+            margin-top: 10px;
+            z-index: 9999999;
+        }
+
+        .mobileMenu{
+            display: none !important;
+        }
+
+        .nav-items{
+            display: block !important;
+            z-index: 999999999;
+            background-color: var(--innerElem); 
+
+            .nav-item{
+                margin: 15px 25px;
+            }
+        }
+    }
+}
+
+.mobileMenu, .mm{
+    display: none;
+}
+
+@media(max-width: 730px){ 
+    body{
+        padding: 0 25px;
+    }
+
+    .dashboard{
+        .repo-list{
+            display: block;
+        }
+
+        .group{
+            border-radius: 20px !important;
+            padding: 10px 25px !important;
+            margin-bottom: 20px;
+        }
+
+        .modal{
+            width: 100%;
+            top: 0;
+            height: 100%;
+            transform: none;
+            left: 0;
+            border-radius: 0px;
+        }
+    }
 }
 
 footer.site-footer{
-    position: absolute;
-    bottom: 20px;
+    padding: 35px 0;
     text-align: center;
     width: 100%;
-    left: 0;
     opacity: 0;
     animation: tgb 0.5s 1s forwards cubic-bezier(0.6, -0.28, 0.735, 0.045);
     
