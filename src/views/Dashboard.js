@@ -235,7 +235,7 @@ class Dashboard extends Component {
                                                 return (
                                                     <li key={repo.id}>
                                                         <div className="header">
-                                                            <a href={repo.html_url} target="_blank" rel="noopener noreferrer" title="View repository on GitHub">{repo.name}</a>
+                                                            <a href={repo.html_url} target="_blank" rel="noopener noreferrer" title={`View ${repo.name} on GitHub`}>{repo.name}</a>
                                                             
                                                             {
                                                                 repo.cleanupStatus === "" && <FiXCircle className="close-icon" title="Don't delete this repository" onClick={e => this.removeFromDelete(repo)}/>
