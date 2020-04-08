@@ -58,11 +58,13 @@ body{
 @keyframes dgb {
     0% {
         opacity: 0;
+        display: none;
         transform: translateY(50px);
     }
 
     100%{
         opacity: 1;
+        display: block;
         transform: translateY(0px);
     }
 }
@@ -728,7 +730,7 @@ footer.welc{
         display: block !important;
         position: fixed;
         background-color: var(--innerElem);
-        padding-top: 50px;
+        padding-top: 35px;
         
         .mm{
             display: block !important; 
@@ -775,8 +777,20 @@ footer.welc{
     }
 
     .dashboard{
+        header{
+            margin: 35px 0;
+
+            img{
+                width: 40px !important;
+            }
+        }
+
         .repo-list{
             display: block;
+
+            h3{
+                margin-top: 5px;
+            }
 
             ul{
                 padding-right: 5px !important;
@@ -809,7 +823,21 @@ footer.welc{
         border-radius: 0px !important;
         transform: none !important;
         left: 0 !important;
-        animation: showupm 0.3s 0.1s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55), hideawaym 0.4s 2s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+        animation: showupm 0.3s 0.1s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+        display: block !important;
+        padding: 0px !important;
+        
+        p{
+            padding: 0 25px;
+        }
+        svg{
+            display: none;
+        }
+
+    }
+
+    .remove{
+        animation: hideawaym 0.4s 2s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
     }
 
  
@@ -820,6 +848,7 @@ footer.site-footer{
     text-align: center;
     width: 100%;
     opacity: 0; 
+    margin-top: 20px;;
     animation: tgb 0.5s 1.5s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55);
     
     a{
@@ -888,9 +917,10 @@ footer.site-footer{
 
 .notification{
     position: fixed;
+    color: #fff;
     background-color: green;
     box-shadow: var(--boxShadow);
-    border-radius: 50px;
+    border-radius: 20px;
     padding: 10px 25px;
     display: grid;
     grid-template-columns: 20px 1fr;
@@ -901,11 +931,15 @@ footer.site-footer{
     transform: translateX(-50%);
     z-index: 10000;
     width: 400px;
-    opacity: 0;
-    animation: showup 0.3s 0.1s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55), hideaway 0.4s 2s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    opacity: 0; 
+    animation: showup 0.3s 0.1s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     svg{
         margin-right: 15px;
         font-size: 20px;
     }
+}
+
+.remove{
+    animation: hideaway 0.4s 0s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
 }

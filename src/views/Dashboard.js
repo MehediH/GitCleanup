@@ -20,6 +20,7 @@ class Dashboard extends Component {
                 message: ""
             }
         }
+
     }
 
     sortByStar(obj){
@@ -149,15 +150,34 @@ class Dashboard extends Component {
             }
         })
 
-        setTimeout(() => {
-            this.setState({
-                notification: {
-                    showing: false,
-                    message: ""
-                }
-            })
-        }, 3000)
+        if(this.timer !== null){
+            clearTimeout(this.timer)
+        }
 
+        this.timer = setTimeout(() => {
+            let d = document.getElementsByClassName("notification");
+
+            if(d.length === 1){
+               d[0].classList.add("remove")
+            }
+
+            setTimeout(() => {
+                this.setState({
+                    notification: {
+                        showing: false,
+                        message: ""
+                    }
+                })
+            }, 400)
+
+
+            this.timer = null;
+        }, 2500)
+
+    }
+
+    componentWillUnmount(){
+        clearTimeout(this.timer)
     }
 
     render() {
@@ -304,7 +324,7 @@ class Dashboard extends Component {
                 {
                     notification.showing && 
 
-                    <div className="notification">
+                    <div className="notification animating">
                         <FiInfo/>
                         <p>{notification.message}</p>
                     </div>
