@@ -837,7 +837,7 @@ footer.welc{
     }
 
     .remove{
-        animation: hideawaym 0.4s 2s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+        animation: hideawaym 0.4s 0s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
     }
 
  
@@ -940,6 +940,8 @@ footer.site-footer{
     }
 }
 
-.remove{
-    animation: hideaway 0.4s 0s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+@media(min-width: 731px){
+    .remove{
+        animation: hideaway 0.4s 0s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+    }
 }
