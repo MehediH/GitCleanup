@@ -99,7 +99,7 @@ class Nav extends Component {
 
                             {this.state.search && 
                                 <React.Fragment>
-                                    <input spellcheck="false" autoFocus type="text" placeholder="Start typing to search..." value={this.state.searchQuery} onChange={e => this.performSearch(e.target.value)} onFocus={e => this.performSearch(e.target.value)}/>
+                                    <input spellCheck="false" autoFocus type="text" placeholder="Start typing to search..." value={this.state.searchQuery} onChange={e => this.performSearch(e.target.value)} onFocus={e => this.performSearch(e.target.value)}/>
                                 </React.Fragment>
                             }
                         </li>

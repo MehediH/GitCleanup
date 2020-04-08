@@ -51,22 +51,24 @@ class App extends Component {
       componentWillMount(){
         fetch("/api/user/").then(res => res.json()).then((res) => {
           this.setState({user: res})
-        }).catch(err => console.log(err))
-      }
+        }).catch(err => console.error(err))
+      }j
       
     
       render() {
         let isLight = checkTheme();
+        let {user} = this.state;
+
         return (
             <Router history={history}>
                 <GlobalStyle/>
                 {
-                    this.state.user.accessToken ?
-                        <Route path="/" component={() => <Dashboard isLight={isLight} />}/>
+                    user.accessToken ?
+                        <Route path="/" component={() => <Dashboard isLight={isLight}/>}/>
                     : <Route path="/" exact component={() => <Splash isLight={isLight} />}/>
                 }
                 
-                <footer className={`site-footer ${this.state.user.accessToken ? "dash" : "welc"}`}>
+                <footer className={`site-footer ${user.accessToken ? "dash" : "welc"}`}>
                   <a href="https://builtbymeh.com/" target="_blank" rel="noopener noreferrer">Built with ❤ by Mehedi Hassan</a>&nbsp;·&nbsp;
                   <a href="https://github.com/MehediH/GitCleanup" target="_blank" rel="noopener noreferrer">Checkout on GitHub</a>
                 </footer>

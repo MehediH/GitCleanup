@@ -13,7 +13,7 @@ class Splash extends Component {
                     <img src={lightLogo} alt="GitCleanup logo" draggable="false" className="lightLogo logo"/>
                 </div>
                 <h1>Welcome to GitCleanup</h1>
-                <h2>Clean up your GitHub by deleting abandoned or empty repositories with just a few clicks.</h2>
+                <h2>Clean up your GitHub profile by deleting abandoned or empty repositories with just a few clicks.</h2>
                 <a href="/api/login"><GoMarkGithub/>Login with GitHub</a>
             </div>
         );

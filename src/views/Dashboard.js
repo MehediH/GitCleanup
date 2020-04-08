@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Nav from "../components/Nav";
-import { FiGlobe, FiLock, FiTrash2, FiXCircle, FiThumbsDown, FiThumbsUp, FiFrown, FiSmile} from "react-icons/fi";
+import { FiGlobe, FiLock, FiTrash2, FiXCircle, FiThumbsDown, FiThumbsUp, FiFrown, FiSmile, FiInfo} from "react-icons/fi";
 import { PropagateLoader } from "react-spinners";
 import Repo from '../components/Repo';
 
@@ -14,7 +14,11 @@ class Dashboard extends Component {
             deletedRepos: [],
             loading: true,
             deleting: false,
-            searchOpen: false
+            searchOpen: false,
+            notification: {
+                showing: false,
+                message: ""
+            }
         }
     }
 
@@ -49,6 +53,8 @@ class Dashboard extends Component {
             repos: {...repos.filter(r => r.name !== repo.name)},
             deletedRepos: [repo, ...this.state.deletedRepos]
         })
+
+        this.showNotification(`Your repository ${repo.name} has been selected for cleanup.`)
     }
 
     removeFromDelete(repo, addBack=true){
@@ -63,6 +69,8 @@ class Dashboard extends Component {
             repos: {...repos},
             deletedRepos
         })
+
+        this.showNotification(`Your repository ${repo.name} is no longer selected for cleanup.`)
     }
 
     deleteRepos(){
@@ -82,9 +90,9 @@ class Dashboard extends Component {
         let status = "success";
         let deleteFromApi = deletedRepos.map((repo) => {
             return new Promise((resolve, reject) => {
-                fetch(`/api/repos/delete/${repo.name}`).then(res => res.json()).then((res) => {
+                fetch(`/api/repos/delete/${encodeURIComponent(repo.full_name)}`).then(res => res.json()).then((res) => {
                     repo.cleanupMessage = res.message;
-
+                    console.log(res)
                     if(res.statusCode === 204){
                         repo.cleanupStatus = "success"
                         deletedRepos = deletedRepos.filter(i => i.name !== repo.name);
@@ -120,6 +128,7 @@ class Dashboard extends Component {
         deletedRepos.map((repo) => {
             repo.cleanupMessage = "";
             repo.cleanupStatus = "";
+            return repo;
         })
 
         this.setState({
@@ -132,8 +141,27 @@ class Dashboard extends Component {
         document.body.classList.remove("mm-open")
     }
 
+    showNotification(message){
+        this.setState({
+            notification: {
+                showing: true,
+                message
+            }
+        })
+
+        setTimeout(() => {
+            this.setState({
+                notification: {
+                    showing: false,
+                    message: ""
+                }
+            })
+        }, 3000)
+
+    }
+
     render() {
-        let {repos, deletedRepos, loading, deleteWarn, deleting, searchOpen} = this.state;
+        let {repos, deletedRepos, loading, deleteWarn, deleting, notification} = this.state;
         repos = Object.values(repos); 
         let privateRepos = repos.filter(repo => repo.private);
         let publicRepos = repos.filter(repo => !repo.private);
@@ -273,7 +301,14 @@ class Dashboard extends Component {
 
                 }
 
+                {
+                    notification.showing && 
 
+                    <div className="notification">
+                        <FiInfo/>
+                        <p>{notification.message}</p>
+                    </div>
+                }
             </div>
         );
     }

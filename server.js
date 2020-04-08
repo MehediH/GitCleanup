@@ -9,7 +9,7 @@ const connect = require("connect-ensure-login");
 const compression = require("compression");
 const path = require("path");
 
-let loginUrl = "/";
+let loginUrl = "/"; // default redirect path when auth fails
 
 passport.serializeUser((user, cb) => {
     cb(null, user);
@@ -23,7 +23,7 @@ passport.deserializeUser((user, cb) => {
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    scope: "repo,delete_repo"
+    scope: "repo,delete_repo" // we need to view repo details and have permission to delete
   }, (accessToken, refreshToken, profile, cb) => {
     let user = {
         ...profile,
@@ -36,10 +36,8 @@ passport.use(new GitHubStrategy({
 const app = express();
 const dev = app.get("env") !== "production";
 
-
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
-app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({ secret: 'totoro', resave: true, saveUninitialized: true }));
 app.use(cors());
@@ -71,10 +69,12 @@ app.get("/api/logout", (req, res) => {
     res.redirect("/");
 });
 
+// Retrusn user details
 app.get("/api/user", connect.ensureLoggedIn(loginUrl), (req, res) => {
     res.send(req.user);
 });
 
+// Get user's repository details from GitHub API and return
 app.get("/api/repos", connect.ensureLoggedIn(loginUrl), (req, res) => {
     let user = req.user;
 
@@ -97,13 +97,14 @@ app.get("/api/repos", connect.ensureLoggedIn(loginUrl), (req, res) => {
     })
 })
 
-app.get("/api/repos/delete/:id", connect.ensureLoggedIn(loginUrl), (req, res) => {
+// Given a repo name, we can delete the repository
+app.get("/api/repos/delete/:fullname", connect.ensureLoggedIn(loginUrl), (req, res) => {
     let user = req.user;
     let accessToken = user["accessToken"];
 
     return new Promise(resolve => {
         request({
-            url: `https://api.github.com/repos/${user["username"]}/${req.params.id}`,
+            url: `https://api.github.com/repos/${req.params.fullname}`,
             headers: {
                 "Authorization": `token ${accessToken}`,
                 "User-Agent": "GitCleanup"

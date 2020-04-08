@@ -3,17 +3,15 @@ import { FiTrash, FiStar, FiEye, FiGitMerge, FiCornerUpLeft, FiGlobe, FiLock } f
 import { GoMarkGithub } from "react-icons/go";
 
 class Repo extends Component {
-    constructor(props){
-        super(props)        
-    }
-
     render() {
         let repo = this.props;
 
         return (
             <li className="repo">
                 <div className="header">
-                    <a className="name" href={repo.html_url} target="_blank" rel="noopener noreferrer" title="View repository on GitHub">{repo.name}</a>
+                    <a className="name" href={repo.html_url} target="_blank" rel="noopener noreferrer" title="View repository on GitHub">
+                        {repo.permissions.admin ?repo.name : repo.full_name}
+                    </a>
                 </div>
                 { repo.description && <p>{repo.description}</p>}
                 <ul className="stats">
