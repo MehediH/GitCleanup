@@ -142,18 +142,24 @@ body{
     }
 }
 
-.search-box ul::-webkit-scrollbar, .group-list::-webkit-scrollbar, .modal .inner::-webkit-scrollbar{
+.search-box ul::-webkit-scrollbar, .group-list::-webkit-scrollbar, .modal .inner::-webkit-scrollbar, .nav-items::-webkit-scrollbar{
     width: 12px;
 }
  
-.search-box ul::-webkit-scrollbar-thumb, .group-list::-webkit-scrollbar-thumb, .modal .inner::-webkit-scrollbar-thumb {
+.search-box ul::-webkit-scrollbar-thumb, .group-list::-webkit-scrollbar-thumb, .modal .inner::-webkit-scrollbar-thumb{
     border-radius: 10px;
     background-color: var(--innerElem);
     cursor: pointer;
 }
 
+.nav-items::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: var(--cardBg);
+    cursor: pointer;
+}
 
-.search-box ul::-webkit-scrollbar-thumb:hover, .group-list::-webkit-scrollbar-thumb:hover, .modal .inner::-webkit-scrollbar-thumb:hover{
+
+.search-box ul::-webkit-scrollbar-thumb:hover, .group-list::-webkit-scrollbar-thumb:hover, .modal .inner::-webkit-scrollbar-thumb:hover, .nav-items::-webkit-scrollbar-thumb:hover{
     border-radius: 10px;
     background-color: rgb(31, 30, 30);
     cursor: pointer;
@@ -190,13 +196,15 @@ body{
         background-color: var(--cardBg);
         border-radius: 0px 0px 50px 50px;
         box-shadow: var(--boxShadow);
-
+        display: block !important;
         overflow: hidden;
         opacity: 0;
         animation: dgb 0.3s 0.1s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55);
         
+        
+
         .inner{
-            overflow-y: auto;
+            overflow: hidden;
             padding: 25px 20px 0px 20px !important;
 
             .results{
@@ -460,7 +468,8 @@ body{
 
                 svg{
                     float: right;
-                    font-size: 23px;;
+                    font-size: 23px;
+                    opacity: 0.5;
                 }
             }
 
@@ -666,7 +675,7 @@ footer.welc{
     left: 0;
 }
 
-@media(max-width: 990px){
+@media(max-width: 1180px){
 
     .welcome{
         padding: 10px;
@@ -746,6 +755,8 @@ footer.welc{
             display: block !important;
             z-index: 999999999;
             background-color: var(--innerElem); 
+            overflow-y: auto;
+            height: calc(100vh - 125px);
 
             .nav-item{
                 margin: 15px 25px;
@@ -797,8 +808,8 @@ footer.site-footer{
     padding: 35px 0;
     text-align: center;
     width: 100%;
-    opacity: 0;
-    animation: tgb 0.5s 1s forwards cubic-bezier(0.6, -0.28, 0.735, 0.045);
+    opacity: 0; 
+    animation: tgb 0.5s 1.5s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55);
     
     a{
         color: var(--text);

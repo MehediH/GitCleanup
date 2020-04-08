@@ -14,10 +14,17 @@ class Nav extends Component {
             search: false,
             searchResults: [],
             searchQuery: "",
-            mobileMenuOpen: false
+            mobileMenuOpen: false,
+            searchBoxX: 0,
+            searchBoxWidth: 0,
+            resized: false
         }
-
+        
         this.searchBox = React.createRef();
+
+        window.addEventListener("resize", () => {
+            this.resetSearchBoxPosition(false)
+        })
     }
 
     componentWillMount(){
@@ -26,7 +33,19 @@ class Nav extends Component {
         }).catch(err => console.log(err))
     }
 
+    resetSearchBoxPosition(resized=true){
+        this.setState({
+            searchBoxX: this.searchBox.current.getBoundingClientRect().x,
+            searchBoxWidth: this.searchBox.current.getBoundingClientRect().width,
+            resized
+        })
+    }
+
     performSearch(query){
+        if(!this.state.resized){
+            this.resetSearchBoxPosition()
+        }
+        
         this.setState({searchQuery: query})
 
         const options = {
@@ -120,8 +139,7 @@ class Nav extends Component {
                     (this.state.searchResults.length !== 0) &&
                     
                     <React.Fragment>
-                        
-                        <div className="search-box repo-list" style={{left: this.searchBox.current.getBoundingClientRect().x + "px", width: this.searchBox.current.getBoundingClientRect().width + "px"}}>
+                        <div className="search-box repo-list" style={{left: this.state.searchBoxX + "px", width: this.state.searchBoxWidth + "px"}}>
                             <div className="inner">
                                 <ul className="results">
                                     {this.state.searchResults.map((repo) => {
