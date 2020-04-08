@@ -1,0 +1,15 @@
+{
+    "name": "GitCleanup",
+    "description": "Clean up your GitHub profile by deleting abandoned or empty repositories with just a few clicks.",
+    "repository": "https://github.com/MehediH/GitCleanup",
+    "logo": "https://github.com/MehediH/GitCleanup/raw/master/src/assets/lightLogo.png",
+    "keywords": ["github", "git", "node", "express", "react"],
+    "env": {
+        "GITHUB_CLIENT_ID": {
+            "description": "Client ID for your GitHub OAuth app. You can make one at https://github.com/settings/developers"
+        },
+        "GITHUB_CLIENT_SECRET": {
+            "description": "Client secret for the GitHub OAuth app."
+        }
+    }
+}
