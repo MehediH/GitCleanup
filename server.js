@@ -8,6 +8,7 @@ const request = require("request");
 const connect = require("connect-ensure-login");
 const compression = require("compression");
 const path = require("path");
+const sslRedirect = require('heroku-ssl-redirect');
 
 let loginUrl = "/"; // default redirect path when auth fails
 
@@ -41,6 +42,7 @@ const dev = app.get("env") !== "production";
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({ secret: 'totoro', resave: true, saveUninitialized: true }));
 app.use(cors());
+app.use(sslRedirect());
 
 if(!dev){
     app.disable("x-powered-by")
