@@ -4,7 +4,7 @@
 
 A web app built with React + Express that lets you bulk delete repositories with just a few clicks. 
 
-[![GitCleanup](https://www.herokucdn.com/deploy/button.svg)](https://www.gitcleanup.com)
+[![GitCleanup](https://raw.githubusercontent.com/MehediH/GitCleanup/master/readmepic.png)](https://www.gitcleanup.com)
 
 You can access the app on [gitcleanup.com](https://www.gitcleanup.com), or deploy your own instance on Heroku:
 
