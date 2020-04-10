@@ -1,6 +1,6 @@
 {
     "name": "GitCleanup",
-    "description": "Clean up your GitHub profile by deleting abandoned or empty repositories with just a few clicks.",
+    "description": "Say hello to GitHub Zero: de-clutter your GitHub profile and get rid of unused repositories with just a few clicks.",
     "repository": "https://github.com/MehediH/GitCleanup",
     "logo": "https://github.com/MehediH/GitCleanup/raw/master/src/assets/lightLogo.png",
     "keywords": ["github", "git", "node", "express", "react"],
