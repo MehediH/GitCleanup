@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Nav from "../components/Nav";
 import { FiGlobe, FiLock, FiTrash2, FiXCircle, FiThumbsDown, FiThumbsUp, FiFrown, FiSmile, FiInfo} from "react-icons/fi";
-import { PropagateLoader } from "react-spinners";
+import { PropagateLoader, BounceLoader } from "react-spinners";
 import Repo from '../components/Repo';
 
 class Dashboard extends Component {
@@ -71,7 +71,9 @@ class Dashboard extends Component {
             deletedRepos
         })
 
-        this.showNotification(`Your repository ${repo.name} is no longer selected for cleanup.`)
+        if(addBack){
+            this.showNotification(`Your repository ${repo.name} is no longer selected for cleanup.`)
+        }
     }
 
     deleteRepos(){
@@ -93,7 +95,7 @@ class Dashboard extends Component {
             return new Promise((resolve, reject) => {
                 fetch(`/api/repos/delete/${encodeURIComponent(repo.full_name)}`).then(res => res.json()).then((res) => {
                     repo.cleanupMessage = res.message;
-                    console.log(res)
+
                     if(res.statusCode === 204){
                         repo.cleanupStatus = "success"
                         deletedRepos = deletedRepos.filter(i => i.name !== repo.name);
@@ -192,10 +194,13 @@ class Dashboard extends Component {
 
                 <div className="repo-list">
                     <div className="group public">
-                        <h3>Public Repositories <FiGlobe/></h3>
+                        <h3>Public Repositories ({ publicRepos.length })<FiGlobe/></h3>
 
                         {
-                            loading ? <div className="loader"><PropagateLoader size={15} color={"#fff"}/></div> : 
+                            loading ? <div className="loader">
+                                <BounceLoader size={50} color={"#333"} className="lightLogo"/>
+                                <BounceLoader size={50} color={"#fff"} className="darkLogo"/>
+                            </div> : 
                             
                             <React.Fragment>
                                 { publicRepos.length === 0 ?
@@ -212,10 +217,13 @@ class Dashboard extends Component {
                     </div>
 
                     <div className="group private">
-                        <h3>Private Repositories <FiLock/></h3>
+                        <h3>Private Repositories ({ privateRepos.length })<FiLock/></h3>
                         
                         {
-                            loading ? <div className="loader"><PropagateLoader size={15} color={"#fff"}/></div> : 
+                            loading ? <div className="loader">
+                                <BounceLoader size={50} color={"#333"} className="lightLogo"/>
+                                <BounceLoader size={50} color={"#fff"} className="darkLogo"/>
+                            </div> : 
                             
                             <React.Fragment>
                                 { privateRepos.length === 0 ?
@@ -232,7 +240,7 @@ class Dashboard extends Component {
                     </div>
 
                     <div className="group delete">
-                        <h3>Repositories to Delete <FiTrash2/></h3>
+                        <h3>Repositories to Delete ({deletedRepos.length})<FiTrash2/></h3>
                         
                         <ul className={`group-list ${deletedRepos.length === 0 ? "" : "delete-list"}`}>
                             { deletedRepos.length === 0 ?
@@ -241,7 +249,7 @@ class Dashboard extends Component {
                                 {deletedRepos.map((repo) => {
                                     return <Repo key={repo.id} onClick={e => this.removeFromDelete(repo)} {...repo} delete={true}></Repo>
                                 })}
-                                <button className="delete-button" onClick={e => this.setState({deleteWarn: true})}><FiTrash2/>Delete Repositories</button>
+                                <button className="delete-button" onClick={e => this.setState({deleteWarn: true})}><FiTrash2/>Delete {deletedRepos.length === 1 ? "Repository" : "Repositories"}</button>
                               </React.Fragment>
                             }
                         </ul>
@@ -309,7 +317,7 @@ class Dashboard extends Component {
                                                 )
                                             })}
                                         </ul>
-                                        {!deleting && <button className="delete-button" onClick={e => this.deleteRepos()}>Permanently Delete {deletedRepos.length} Repositories</button>}
+                                        {!deleting && <button className="delete-button" onClick={e => this.deleteRepos()}>Permanently Delete {deletedRepos.length} {deletedRepos.length === 1 ? "Repository" : "Repositories"}</button>}
                                     </React.Fragment>
 
                                 </div>

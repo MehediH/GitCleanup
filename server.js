@@ -24,7 +24,7 @@ passport.deserializeUser((user, cb) => {
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    scope: "repo,delete_repo" // we need to view repo details and have permission to delete
+    scope: "repo,delete_repo,user" // we need to view repo details and have permission to delete
   }, (accessToken, refreshToken, profile, cb) => {
     let user = {
         ...profile,
@@ -76,27 +76,48 @@ app.get("/api/user", connect.ensureLoggedIn(loginUrl), (req, res) => {
     res.send(req.user);
 });
 
+
 // Get user's repository details from GitHub API and return
 app.get("/api/repos", connect.ensureLoggedIn(loginUrl), (req, res) => {
     let user = req.user;
 
     let accessToken = user["accessToken"];
 
-    return new Promise(resolve => {
-        request({
-            url: 'https://api.github.com/user/repos?sort=created',
-            headers: {
-                "Authorization": `token ${accessToken}`,
-                "User-Agent": "GitCleanup"
-            }
-        }, function(err, res) {
-            if(!err){
-                resolve(res.body)
-            }
-        });
-    }).then(data => {
-        res.send(data)
+    let repos = []
+    let pages = [1]
+
+    let repoCount = user["_json"]["public_repos"] + user["_json"]["total_private_repos"];
+
+    while(repoCount > 100){
+        pages.push(pages[pages.length-1] + 1);
+        repoCount -= 100;
+    }
+
+    let getAPIPages = pages.map((page) => {
+        return new Promise((resolve, reject) => {
+            console.log('https://api.github.com/user/repos?sort=created&per_page=100&page=' + page)
+            request({
+                url: 'https://api.github.com/user/repos?sort=created&per_page=100&page=' + page,
+                headers: {
+                    "Authorization": `token ${accessToken}`,
+                    "User-Agent": "GitCleanup"
+                }
+            }, function(err, res) {
+                if(!err){
+                    let data = Object.values(JSON.parse(res.body));
+                    repos.push(...data)
+
+                    resolve(repos)
+                }
+            })
+        })
+        
     })
+
+    Promise.all(getAPIPages).then((data) => {
+        res.json([].concat.apply([], repos))
+    })
+
 })
 
 // Given a repo name, we can delete the repository
