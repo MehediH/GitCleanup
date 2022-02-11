@@ -17,7 +17,7 @@
     "heroku-ssl-redirect": "0.0.4",
     "http-proxy-middleware": "^1.0.3",
     "morgan": "^1.10.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "nodemon": "^2.0.2",
     "passport": "^0.4.1",
     "passport-github": "^1.1.0",
